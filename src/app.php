@@ -45,7 +45,7 @@ $app['config'] = Yaml::parse(file_get_contents($config));
 
 // determine the data model backend using the app configuration
 $app['bookshelf.model'] = function ($app) {
-    /** @var array $config */
+    /** @var array $config **/
     $config = $app['config'];
     if (empty($config['bookshelf_backend'])) {
         throw new \DomainException('"bookshelf_backend" must be set in bookshelf config');
