@@ -6,7 +6,7 @@
  * Time: 9:56 PM
  */
 
-require __DIR__ . "/connect.php";
+require_once __DIR__ . "/connect.php";
 
 if(mysqli_connect_errno()) {
     print_r(mysqli_connect_error());

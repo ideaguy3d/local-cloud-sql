@@ -11,20 +11,42 @@ require __DIR__ . "/functions.php";
 $error = "";
 $action = array_key_exists('action', $_GET) ? $_GET['action'] : "";
 $email = array_key_exists('email', $_GET) ? $_GET['email'] : "";
-$validEmail = filter_var($email, FILTER_VALIDATE_EMAIL);
-$tableQue = "CREATE TABLE IF NOT EXISTS users (user_id INT, email VARCHAR (255), pass VARCHAR (255))";
+$validEmail = mysqli_real_escape_string($link, filter_var($email, FILTER_VALIDATE_EMAIL));
+$loginActive = array_key_exists('loginActive', $_GET) ? $_GET['loginActive'] : "";
 
 if ($action) {
-    if(!$action) {
+    if (!$action) {
         $error = "you need an action";
-    }
-    else if ($action == "loginSignup") {
-        echo "jha - in the loginSignup endpoint (: ";
+    } else if ($action == "loginSignup") {
+
+        echo " - jha - in the loginSignup endpoint (: ";
+
         if (!$validEmail) {
             $error = "you need a valid email";
         }
 
-        if ($error != "") echo $error;
+        if ($error != "") {
+            echo $error;
+            exit();
+        }
+
+        if ($loginActive == "0") {
+            echo "in loginActive";
+            $getUserQue = "SELECT * FROM users WHERE email = '$validEmail' LIMIT 1";
+            $result = mysqli_query($link, $getUserQue);
+            echo "<br>";
+            echo print_r($result);
+            echo "<br>";
+            if (mysqli_num_rows($result) > 0) {
+                $error = "That email is already used";
+                echo "There should be an error...";
+            }
+        }
+
+        if ($error != "") {
+            echo $error;
+            exit();
+        }
     }
 }
 
