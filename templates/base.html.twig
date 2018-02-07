@@ -20,6 +20,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="../app.css">
 </head>
 <body>
 <div class="navbar navbar-default">
@@ -35,6 +37,23 @@
 <div class="container">
     {% block content %}{% endblock %}
 </div>
-{{ user }}
+
+<h1>User: {{ user }}</h1>
+
+<!-- Footer -->
+<div> &nbsp;&nbsp; Built by: <a href="http://julius3d.com" target="_blank">Julius Alvarado ^_^</a></div>
+
+
+<!-- In production use:
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
+-->
+
+<!-- Vendor JavaScript -->
+<script src="../bower_components/angular.min.js"></script>
+<script src="../bower_components/angular-route.min.js"></script>
+
+<!-- Custom JavaScript -->
+<script src="../app.js"></script>
+
 </body>
 </html>

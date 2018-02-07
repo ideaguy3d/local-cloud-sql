@@ -11,7 +11,7 @@ angular.module('myApp', ['ngRoute']).config(['$locationProvider', '$routeProvide
     function ($scope, $http) {
         $scope.ccMessage = "Hello, from the CoreCtrl";
         $scope.login = function () {
-            var action = encodeURIComponent("loginSignup");
+            var action = encodeURIComponent("postNewUser");
 
             $http //-- The Request(currently hardcoded values):
                 .get("actions.php?action=" + action +
@@ -22,7 +22,7 @@ angular.module('myApp', ['ngRoute']).config(['$locationProvider', '$routeProvide
                     console.log("jha - response = ");
                     console.log(res.data);
                     $scope.ccUser = res.data;
-                })
+                });
         };
     }
 ]);

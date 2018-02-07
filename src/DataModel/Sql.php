@@ -21,7 +21,7 @@ use PDO;
 
 /**
  * Class Sql implements the DataModelInterface with a mysql or postgres database.
-**/
+ **/
 class Sql implements DataModelInterface
 {
     private $dsn;
@@ -31,8 +31,7 @@ class Sql implements DataModelInterface
     /**
      * Creates the SQL books table if it doesn't already exist.
      */
-    public function __construct($dsn, $user, $password)
-    {
+    public function __construct($dsn, $user, $password) {
         $this->dsn = $dsn;
         $this->user = $user;
         $this->password = $password;
@@ -61,8 +60,7 @@ class Sql implements DataModelInterface
      *
      * @return PDO
      */
-    private function newConnection()
-    {
+    private function newConnection() {
         $pdo = new PDO($this->dsn, $this->user, $this->password);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -76,8 +74,7 @@ class Sql implements DataModelInterface
      *
      * @throws \Exception
      */
-    private function verifyBook($book)
-    {
+    private function verifyBook($book) {
         if ($invalid = array_diff_key($book, array_flip($this->columnNames))) {
             throw new \Exception(sprintf(
                 'unsupported book properties: "%s"',
@@ -86,8 +83,7 @@ class Sql implements DataModelInterface
         }
     }
 
-    public function listBooks($limit = 10, $cursor = null)
-    {
+    public function listBooks($limit = 10, $cursor = null) {
         $pdo = $this->newConnection();
         if ($cursor) {
             $query = 'SELECT * FROM books WHERE id > :cursor ORDER BY id' .
@@ -118,8 +114,7 @@ class Sql implements DataModelInterface
         );
     }
 
-    public function create($book, $id = null)
-    {
+    public function create($book, $id = null) {
         $this->verifyBook($book);
         if ($id) {
             $book['id'] = $id;
@@ -140,8 +135,7 @@ class Sql implements DataModelInterface
         return $pdo->lastInsertId();
     }
 
-    public function read($id)
-    {
+    public function read($id) {
         $pdo = $this->newConnection();
         $statement = $pdo->prepare('SELECT * FROM books WHERE id = :id');
         $statement->bindValue('id', $id, PDO::PARAM_INT);
@@ -150,8 +144,7 @@ class Sql implements DataModelInterface
         return $statement->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function update($book)
-    {
+    public function update($book) {
         $this->verifyBook($book);
         $pdo = $this->newConnection();
         $assignments = array_map(
@@ -170,8 +163,7 @@ class Sql implements DataModelInterface
         return $statement->execute($values);
     }
 
-    public function delete($id)
-    {
+    public function delete($id) {
         $pdo = $this->newConnection();
         $statement = $pdo->prepare('DELETE FROM books WHERE id = :id');
         $statement->bindValue('id', $id, PDO::PARAM_INT);
@@ -180,8 +172,7 @@ class Sql implements DataModelInterface
         return $statement->rowCount();
     }
 
-    public static function getMysqlDsn($dbName, $port, $connectionName = null)
-    {
+    public static function getMysqlDsn($dbName, $port, $connectionName = null) {
         if ($connectionName) {
             return sprintf('mysql:unix_socket=/cloudsql/%s;dbname=%s',
                 $connectionName,
@@ -189,16 +180,5 @@ class Sql implements DataModelInterface
         }
 
         return sprintf('mysql:host=127.0.0.1;port=%s;dbname=%s', $port, $dbName);
-    }
-
-    public static function getPostgresDsn($dbName, $port, $connectionName = null)
-    {
-        if ($connectionName) {
-            return sprintf('pgsql:host=/cloudsql/%s;dbname=%s',
-                $connectionName,
-                $dbName);
-        }
-
-        return sprintf('pgsql:host=127.0.0.1;port=%s;dbname=%s', $port, $dbName);
     }
 }

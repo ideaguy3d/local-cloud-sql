@@ -1,32 +1,49 @@
 <?php
 
-/*
- * Copyright 2015 Google Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 namespace Google\Cloud\Samples\Bookshelf;
 
 /*
- * Adds all the controllers to $app.  Follows Silex Skeleton pattern.
+ * Adds all the controllers to $app. Follows Silex Skeleton pattern.
  */
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Google\Cloud\Samples\Bookshelf\DataModel\DataModelInterface;
 
 $app->get('/', function (Request $request) use ($app) {
-    return $app->redirect('/books/');
+     return $app->redirect('/home/');
+});
+
+$juliusBlogPosts = array(
+    1 => array (
+        'date' => 'feb.5th',
+        'title' => 'JavaScript',
+        'author' => 'Julius',
+        'body' => 'JavaScript is for client side coding'
+    ),
+    2 => array (
+        'date' => 'feb.4th',
+        'title' => 'PHP',
+        'author' => 'Ary',
+        'body' => 'PHP for probably the best web language there is'
+    ),
+    3 => array (
+        'date' => 'feb.3rd',
+        'title' => 'C#',
+        'author' => 'Vince',
+        'body' => 'C# is great for scripting game engines'
+    )
+);
+
+$app->juliusBlogPosts = $juliusBlogPosts;
+
+$app->get('/home/', function(Request $request) use ($app) {
+    $output = '';
+    foreach($app->juliusBlogPosts as $jpost) {
+
+        $output .= $jpost['title'];
+        $output .= '<br>';
+    }
+    return $output;
 });
 
 // [START index]

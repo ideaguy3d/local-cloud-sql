@@ -11,13 +11,11 @@ require __DIR__ . "/functions.php";
 $error = "";
 $action = array_key_exists('action', $_GET) ? $_GET['action'] : "";
 $email = array_key_exists('email', $_GET) ? $_GET['email'] : "";
-$validEmail = mysqli_real_escape_string($link, filter_var($email, FILTER_VALIDATE_EMAIL));
+$validEmail = @mysqli_real_escape_string($link, filter_var($email, FILTER_VALIDATE_EMAIL));
 $loginActive = array_key_exists('loginActive', $_GET) ? $_GET['loginActive'] : "";
 
 if ($action) {
-    if (!$action) {
-        $error = "you need an action";
-    } else if ($action == "loginSignup") {
+    if ($action == "loginSignup") {
 
         echo " - jha - in the loginSignup endpoint (: ";
 
@@ -46,6 +44,16 @@ if ($action) {
         if ($error != "") {
             echo $error;
             exit();
+        }
+    }
+    else if ($action == "postNewUser") {
+        try {
+            $randPass = rand(0, 10000);
+            $sql = "INSERT INTO users (email, pass) VALUES ('$validEmail', '$randPass')";
+            $conn->exec($sql);
+            echo "New user created ^_^";
+        } catch (PDOException $e) {
+            echo $sql . " Error /: " . $e->getMessage();
         }
     }
 }
