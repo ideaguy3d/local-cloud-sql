@@ -1,7 +1,10 @@
 {
   "autoload": {
     "psr-4": {
-      "Google\\Cloud\\Samples\\Bookshelf\\": ["src", "test/lib"]
+      "Google\\Cloud\\Samples\\Bookshelf\\": [
+        "src",
+        "test/lib"
+      ]
     }
   },
   "require": {

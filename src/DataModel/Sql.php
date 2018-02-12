@@ -94,11 +94,13 @@ class Sql implements DataModelInterface
             $query = 'SELECT * FROM books ORDER BY id LIMIT :limit';
             $statement = $pdo->prepare($query);
         }
+
         $statement->bindValue(':limit', $limit + 1, PDO::PARAM_INT);
         $statement->execute();
         $rows = array();
         $last_row = null;
         $new_cursor = null;
+
         while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
             if (count($rows) == $limit) {
                 $new_cursor = $last_row['id'];
