@@ -43,6 +43,7 @@ $app->get('/home/', function(Request $request) use ($app) {
         $output .= $jpost['title'];
         $output .= '<br>';
     }
+
     return $output;
 });
 

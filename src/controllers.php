@@ -23,10 +23,8 @@ if ($addBook) {
 
 if ($getBooks && $_GET['get-books'] == 'true') {
     $model = $app['bookshelf.model']($app);
-    print_r($model);
     $books = $model->listBooks();
 
-    echo "get-books = " . $_GET['get-books'] . "<br><br>";
     echo print_r($books);
 }
 

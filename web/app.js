@@ -10,6 +10,16 @@ angular.module('myApp', ['ngRoute']).config(['$locationProvider', '$routeProvide
 ]).controller('CoreCtrl', ["$scope", "$http",
     function ($scope, $http) {
         $scope.ccMessage = "Hello, from the CoreCtrl";
+
+        $scope.testGetOne = function() {
+            var getBooks = encodeURIComponent("true");
+            $http.get('/?get-books='+getBooks).then(function(res) {
+                console.log("jha - res.data");
+                console.log(res.data);
+                $scope.testGetOneData = res.data;
+            });
+        };
+
         $scope.login = function () {
             var action = encodeURIComponent("postNewUser");
 

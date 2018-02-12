@@ -1,5 +1,4 @@
 <?php
-
 // namespace Google\Cloud\Samples\Bookshelf\DataModel;
 
 use Google\Cloud\Samples\Bookshelf\DataModel\Sql;
