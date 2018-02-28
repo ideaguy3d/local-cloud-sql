@@ -27,6 +27,8 @@ class Sql implements DataModelInterface
     private $dsn;
     private $user;
     private $password;
+    private $columnNames; // for the books table
+    private $tasksColumnNamesAR; // for the tasks table
 
     /**
      * Creates the SQL books table if it doesn't already exist.
@@ -36,6 +38,13 @@ class Sql implements DataModelInterface
         $this->user = $user;
         $this->password = $password;
 
+        $pdo = $this->newConnection();
+
+        $this->createBooksTable($pdo);
+        $this->createTasksTable($pdo);
+    }
+
+    private function createBooksTable($pdo) {
         $columns = array(
             'id serial PRIMARY KEY ',
             'title VARCHAR(255)',
@@ -47,12 +56,30 @@ class Sql implements DataModelInterface
             'created_by_id VARCHAR(255)',
         );
 
+        // store columnNames so that it can be accessed in other functions for this model
         $this->columnNames = array_map(function ($columnDefinition) {
             return explode(' ', $columnDefinition)[0];
         }, $columns);
+
+        // actually create the table
         $columnText = implode(', ', $columns);
-        $pdo = $this->newConnection();
         $pdo->query("CREATE TABLE IF NOT EXISTS books ($columnText)");
+    }
+
+    private function createTasksTable($pdo) {
+        $columns = [
+            'id ',
+            'task_one VARCHAR(255)'
+        ];
+
+        // store tasks table column names so it can be accessed by other functions
+        $this->tasksColumnNamesAR = array_map(function($columnDefinition) {
+            return explode(" ", $columnDefinition)[0];
+        }, $columns);
+
+        // now actually create the table
+        $columnValues = implode(", ", $columns);
+        $pdo->query("CREATE TABLE IF NOT EXISTS tasks ($columnValues)");
     }
 
     /**

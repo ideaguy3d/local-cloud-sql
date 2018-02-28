@@ -15,8 +15,7 @@ $validEmail = @mysqli_real_escape_string($link, filter_var($email, FILTER_VALIDA
 $loginActive = array_key_exists('loginActive', $_GET) ? $_GET['loginActive'] : "";
 
 if ($action) {
-    if ($action == "loginSignup") {
-
+    if ($action === "loginSignup") {
         echo " - jha - in the loginSignup endpoint (: ";
 
         if (!$validEmail) {
