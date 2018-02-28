@@ -92,7 +92,7 @@ class Sql implements DataModelInterface
     private function createSimpleClientTable($pdo, $tableName) {
         $columns = [
             'id serial PRIMARY KEY ',
-            'amazon_order_id serial UNIQUE KEY',
+            'amazon_order_id VARCHAR(255)',
             'client_name VARCHAR(255)',
             'client_description VARCHAR(255)'
         ];
@@ -166,11 +166,20 @@ class Sql implements DataModelInterface
         );
     }
 
-    public function createSimpleClientReport($client) {
+    public function createSimpleClientReport($clientInfo, $tableName) {
         $pdo = $this->newConnection();
-        $tableName = $client["tableName"];
-
         $this->createSimpleClientTable($pdo, $tableName);
+
+        $names = array_keys($clientInfo);
+        $placeholders = array_map(function($key) {
+            return ":$key";
+        }, $names);
+        $sql = sprintf("INSERT INTO $tableName (%s) VALUES (%s)",
+            implode(", ", $names), implode(", ", $placeholders));
+        $statement = $pdo->prepare($sql);
+        $statement->execute($clientInfo);
+
+        return $pdo->lastInsertId();
     }
 
     public function create($book, $id = null) {
@@ -179,6 +188,7 @@ class Sql implements DataModelInterface
             $book['id'] = $id;
         }
         $pdo = $this->newConnection();
+
         $names = array_keys($book);
         $placeHolders = array_map(function ($key) {
             return ":$key";

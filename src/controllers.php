@@ -37,7 +37,12 @@ if ($getBooks === 'true') {
 }
 
 if($action === 'create-table') {
-    $model = $app["bookshelf.model"]($app);
+    $clientInfo = [
+        "client_name" => $clientName,
+        "client_description" => "the client description of the client",
+    ];
 
+    $model = $app["bookshelf.model"]($app);
+    $model->createSimpleClientReport($clientInfo, $tableName);
 }
 

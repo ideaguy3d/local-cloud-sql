@@ -11,9 +11,9 @@ angular.module('myApp', ['ngRoute']).config(['$locationProvider', '$routeProvide
     function ($scope, $http) {
         $scope.ccMessage = "Hello, from the CoreCtrl";
         $scope.newClientReport = {
-            mwsAuthKey: "",
-            clientName: "",
-            tableName: ""
+            mwsAuthKey: "asdlkj23415",
+            clientName: "julius3d",
+            tableName: "julius3d_fba_orders_v1"
         };
 
         $scope.testGetOne = function() {
@@ -41,6 +41,7 @@ angular.module('myApp', ['ngRoute']).config(['$locationProvider', '$routeProvide
         };
 
         $scope.createTable = function() {
+            console.log("jha - crateTableF invoked... hmm.");
             var client = $scope.newClientReport.clientName;
             var table = $scope.newClientReport.tableName;
 
@@ -48,7 +49,7 @@ angular.module('myApp', ['ngRoute']).config(['$locationProvider', '$routeProvide
             var eTableName = encodeURIComponent(table);
             $http.get("/?action=create-table&client-name="+eClientName+
             "&table-name="+eTableName).then(function(res) {
-                console.log("The response data = ");
+                console.log("The response data =");
                 console.log(res.data);
                 console.log("The response object =");
                 console.log(res);
