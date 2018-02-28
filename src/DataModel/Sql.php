@@ -29,6 +29,7 @@ class Sql implements DataModelInterface
     private $password;
     private $columnNames; // for the books table
     private $tasksColumnNamesAR; // for the tasks table
+    private $simpleClientColumnNamesAR; // for simple client table
 
     /**
      * Creates the SQL books table if it doesn't already exist.
@@ -68,8 +69,14 @@ class Sql implements DataModelInterface
 
     private function createTasksTable($pdo) {
         $columns = [
-            'id ',
-            'task_one VARCHAR(255)'
+            'id serial PRIMARY KEY ',
+            'task_one VARCHAR(255)',
+            'task_two VARCHAR(255)',
+            'title VARCHAR(255)',
+            'name VARCHAR(255)',
+            'deadline_date VARCHAR(255)',
+            'task_image_url VARCHAR(255)',
+            'description VARCHAR(255)',
         ];
 
         // store tasks table column names so it can be accessed by other functions
@@ -80,6 +87,22 @@ class Sql implements DataModelInterface
         // now actually create the table
         $columnValues = implode(", ", $columns);
         $pdo->query("CREATE TABLE IF NOT EXISTS tasks ($columnValues)");
+    }
+
+    private function createSimpleClientTable($pdo, $tableName) {
+        $columns = [
+            'id serial PRIMARY KEY ',
+            'amazon_order_id serial UNIQUE KEY',
+            'client_name VARCHAR(255)',
+            'client_description VARCHAR(255)'
+        ];
+
+        $this->simpleClientColumnNamesAR = array_map(function($columnDefinition) {
+            return explode(" ", $columnDefinition)[0];
+        }, $columns);
+
+        $columnValues = implode(", ", $columns);
+        $pdo->query("CREATE TABLE IF NOT EXISTS $tableName ($columnValues)");
     }
 
     /**
@@ -141,6 +164,13 @@ class Sql implements DataModelInterface
             'books' => $rows,
             'cursor' => $new_cursor,
         );
+    }
+
+    public function createSimpleClientReport($client) {
+        $pdo = $this->newConnection();
+        $tableName = $client["tableName"];
+
+        $this->createSimpleClientTable($pdo, $tableName);
     }
 
     public function create($book, $id = null) {

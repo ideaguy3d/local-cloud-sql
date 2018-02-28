@@ -18,9 +18,10 @@
     <div data-ng-controller="CoreCtrl">
         <h2>{{ccMessage}}</h2>
         <form data-ng-submit="signup()">
-            <input type="email" placeholder="Email">
-            <input type="text" placeholder="Name">
-            <input type="password" placeholder="Password">
+            <input type="text" placeholder="MWS Auth Key" ng-model="newClientReport.mwsAuthKey">
+            <input type="text" placeholder="Client Name" ng-model="newClientReport.clientName">
+            <input type="text" placeholder="Table Name" ng-model="newClientReport.tableName">
+            <!-- submit button -->
             <button type="submit">Sign up</button>
         </form>
 

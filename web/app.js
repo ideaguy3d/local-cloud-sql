@@ -10,6 +10,11 @@ angular.module('myApp', ['ngRoute']).config(['$locationProvider', '$routeProvide
 ]).controller('CoreCtrl', ["$scope", "$http",
     function ($scope, $http) {
         $scope.ccMessage = "Hello, from the CoreCtrl";
+        $scope.newClientReport = {
+            mwsAuthKey: "",
+            clientName: "",
+            tableName: ""
+        };
 
         $scope.testGetOne = function() {
             var getBooks = encodeURIComponent("true");
@@ -34,5 +39,20 @@ angular.module('myApp', ['ngRoute']).config(['$locationProvider', '$routeProvide
                     $scope.ccUser = res.data;
                 });
         };
+
+        $scope.createTable = function() {
+            var client = $scope.newClientReport.clientName;
+            var table = $scope.newClientReport.tableName;
+
+            var eClientName = encodeURIComponent(client);
+            var eTableName = encodeURIComponent(table);
+            $http.get("/?action=create-table&client-name="+eClientName+
+            "&table-name="+eTableName).then(function(res) {
+                console.log("The response data = ");
+                console.log(res.data);
+                console.log("The response object =");
+                console.log(res);
+            });
+        }
     }
 ]);
